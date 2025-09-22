@@ -5,18 +5,11 @@ from gpiozero import DigitalInputDevice
 import threading
 
 class Odometre:
-    # Distance en centimètres parcourue par transition d'encodeur
-    # Cette valeur devra être ajustée selon votre robot et vos encodeurs
+
     DISTANCE_PAR_TRANSITION = 0.1  # À ajuster selon votre configuration
 
     def __init__(self, encodeur_gauche_pin, encodeur_droite_pin):
-        """
-        Constructeur de l'odométre
 
-        Args:
-            encodeur_gauche_pin (int): Numéro de la broche Out de l'encodeur gauche
-            encodeur_droite_pin (int): Numéro de la broche Out de l'encodeur droit
-        """
         # Création des objets DigitalInputDevice pour les encodeurs
         self.encodeur_gauche = DigitalInputDevice(encodeur_gauche_pin)
         self.encodeur_droite = DigitalInputDevice(encodeur_droite_pin)
@@ -31,30 +24,22 @@ class Odometre:
         self.distance_parcourue = 0
 
     def _callback_encodeur_gauche_activation(self):
-        """Callback appelé lors de l'activation de l'encodeur gauche"""
         self.transitions_gauche += 1
         self._calculer_distance()
 
     def _callback_encodeur_gauche_desactivation(self):
-        """Callback appelé lors de la désactivation de l'encodeur gauche"""
         self.transitions_gauche += 1
         self._calculer_distance()
 
     def _callback_encodeur_droite_activation(self):
-        """Callback appelé lors de l'activation de l'encodeur droit"""
         self.transitions_droite += 1
         self._calculer_distance()
 
     def _callback_encodeur_droite_desactivation(self):
-        """Callback appelé lors de la désactivation de l'encodeur droit"""
         self.transitions_droite += 1
         self._calculer_distance()
 
     def _calculer_distance(self):
-        """
-        Calcule la distance parcourue basée sur la moyenne des transitions
-        des deux encodeurs et vérifie si la distance cible est atteinte
-        """
         # Calcul de la moyenne des transitions des deux encodeurs
         moyenne_transitions = (self.transitions_gauche + self.transitions_droite) / 2
 
