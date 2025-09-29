@@ -1,6 +1,3 @@
-# Modifié par J. S. Morales
-# 21 septembre 2025
-
 import cv2
 from picamera2 import Picamera2, Preview
 import numpy as np
@@ -12,11 +9,8 @@ LARGEUR = 640
 HAUTEUR = 480
 
 picam2 = Picamera2()
-
-config = picam2.create_preview_configuration(main={"format": 'RGB888', 
-                                             "size": (LARGEUR, HAUTEUR)})
+config = picam2.create_preview_configuration(main={"format": 'RGB888', "size": (LARGEUR, HAUTEUR)})
 picam2.align_configuration(config)
-(largeur_img, hauteur_img) = config["main"]["size"]
 picam2.configure(config)
 picam2.start()
 
@@ -29,11 +23,11 @@ cv2.createTrackbar('Saturation max', titre_fenetre, 0,255, track_bar_cb)
 cv2.createTrackbar('Valeur min', titre_fenetre, 0, 255, track_bar_cb)
 cv2.createTrackbar('Valeur max', titre_fenetre, 0, 255, track_bar_cb)
 
-print(f"Pour quitter presser la touche 'q'.")
+print(f"Pour quitter presser la touche 'q'. Pour prendre une photo, presser 'p'.")
 
 terminer = False
+photo_id = 1
 while not terminer:
-
     min_teinte = cv2.getTrackbarPos('Teinte min', titre_fenetre)
     max_teinte = cv2.getTrackbarPos('Teinte max', titre_fenetre)
     sat_min = cv2.getTrackbarPos('Saturation min', titre_fenetre)
@@ -44,19 +38,20 @@ while not terminer:
     teinte_min = np.array([min_teinte, sat_min, val_min])
     teinte_max = np.array([max_teinte, sat_max, val_max])
 
-    print(f"{teinte_min}, {teinte_max}")
     frame_bgr = picam2.capture_array()
     frame_hsv = cv2.cvtColor(frame_bgr, cv2.COLOR_BGR2HSV)
     frame_disc = cv2.inRange(frame_hsv, teinte_min, teinte_max)
     cv2.imshow("Image BGR", frame_bgr)
     cv2.imshow("HSV", frame_hsv)
     cv2.imshow("Image disc", frame_disc)
-    image = picam2.capture_array()
-    choix = cv2.waitKey(30)
-    if  choix == ord('q'):
-        terminer = True
 
+    choix = cv2.waitKey(30)
+    if choix == ord('q'):
+        terminer = True
+    elif choix == ord('p'):
+        nom_fichier = f"photo_{photo_id}.png"
+        cv2.imwrite(nom_fichier, frame_bgr)
+        print(f"Photo sauvegardée sous {nom_fichier}")
+        photo_id += 1
 
 cv2.destroyAllWindows()
-
-

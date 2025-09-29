@@ -2,6 +2,7 @@ from odometre import Odometre
 import numpy as np
 import cv2
 from robot import Robot
+from sonar import Sonar
 import time
 
 def main():
@@ -26,6 +27,7 @@ def main():
                         cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 0), 2)
             cv2.imshow('labo2', img)
 
+            key = cv2.waitKeyEx(30)
 
             if key == ord('x'):
                 robot.arreter()
