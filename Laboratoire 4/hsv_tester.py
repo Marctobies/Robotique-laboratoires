@@ -1,9 +1,15 @@
 # Modifié par J. S. Morales
 # 21 septembre 2025
 
+
 import cv2
 from picamera2 import Picamera2, Preview
 import numpy as np
+
+# Teinte minimum = [0, 176, 0]
+# Teinte maximum = [73, 255, 253]
+
+
 
 def track_bar_cb(x):
     pass
@@ -41,8 +47,8 @@ while not terminer:
     val_min = cv2.getTrackbarPos('Valeur min', titre_fenetre)
     val_max = cv2.getTrackbarPos('Valeur max', titre_fenetre)
 
-    teinte_min = np.array([min_teinte, sat_min, val_min])
-    teinte_max = np.array([max_teinte, sat_max, val_max])
+    teinte_min = np.array([0, 176, 0])
+    teinte_max = np.array([73, 255, 253])
 
     print(f"{teinte_min}, {teinte_max}")
     frame_bgr = picam2.capture_array()
@@ -51,12 +57,14 @@ while not terminer:
     cv2.imshow("Image BGR", frame_bgr)
     cv2.imshow("HSV", frame_hsv)
     cv2.imshow("Image disc", frame_disc)
-    image = picam2.capture_array()
     choix = cv2.waitKey(30)
     if  choix == ord('q'):
         terminer = True
 
-
 cv2.destroyAllWindows()
+
+
+
+
 
 
