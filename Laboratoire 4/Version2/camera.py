@@ -11,7 +11,7 @@ class Camera:
         self.LARGEUR = largeur
         self.HAUTEUR = hauteur
         self.picam2 = Picamera2()
-        
+        #Si on mettait toute les valeurs de teinte min à 0, l'image sera
         self.TEINTE_MIN = np.array([0, 172, 197])
         self.TEINTE_MAX = np.array([10, 255, 255])
         
