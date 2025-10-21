@@ -1,11 +1,9 @@
-#Auteur: Marc-Antoine Faucher et Loik Boulanger
-#Date: 2025-10-02
+# Auteur: Marc-Antoine Faucher et Loik Boulanger
+# Date: 2025-10-06
 
 import cv2
 from picamera2 import Picamera2, Preview
 import numpy as np
-
-
 
 
 class Camera:
@@ -14,18 +12,18 @@ class Camera:
         self.HAUTEUR = hauteur
         self.picam2 = Picamera2()
         
-        self.TEINTE_MIN = np.array([0, 172, 203])
+        self.TEINTE_MIN = np.array([0, 172, 197])
         self.TEINTE_MAX = np.array([10, 255, 255])
         
-        #Arrête le suivi si la balle est trop loin
+        # Arrête le suivi si la balle est trop loin
         self.SURFACE_MIN = 500    
 
-        #Arrête le suivi si la balle est trop proche
+        # Arrête le suivi si la balle est trop proche
         self.SURFACE_MAX = 50000
 
-        #Marge de tolérance pour considérer que la balle est au centre
-        #Le robot avancera tout droit si la balle est dans cette marge  
-        self.MARGE_CENTRE = 150
+        # Marge de tolérance pour considérer que la balle est au centre
+        # Le robot avancera tout droit si la balle est dans cette marge
+        self.MARGE_CENTRE = 200
         
         # Configuration de la caméra
         config = self.picam2.create_preview_configuration(
@@ -64,7 +62,6 @@ class Camera:
             centre_y = y + h / 2
             position_balle = (int(centre_x), int(centre_y))
 
-
         cv2.imshow("Image BGR", frame_bgr)
         cv2.imshow("Image Binaire", frame_disc)
         
@@ -73,7 +70,6 @@ class Camera:
    
 
     def analyse(self, position_balle, surface_balle):
-
         # Si la balle est trop loin ou trop proche, on arrête le robot
         if position_balle is None or surface_balle < self.SURFACE_MIN or surface_balle > self.SURFACE_MAX:
             return "ARRETER"
@@ -81,7 +77,7 @@ class Camera:
         centre_image = self.LARGEUR / 2
         x_balle = position_balle[0]
         
-        #Si la balle est dans la marge du centre, on avance tout droit
+        # Si la balle est dans la marge du centre, on avance tout droit
         if abs(x_balle - centre_image) < self.MARGE_CENTRE:
             return "AVANCER"
         # Si la balle est à gauche du centre, on tourne à gauche

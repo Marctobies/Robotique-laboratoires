@@ -1,5 +1,5 @@
 #Auteur: Marc-Antoine Faucher et Loik Boulanger
-#Date: 2025-10-02
+#Date: 2025-10-06
 
 from moteur import *
 
@@ -8,7 +8,7 @@ class Robot:
         
         self.moteur_gauche = Moteur(6, 5, 13)
         self.moteur_droit = Moteur(15, 14, 18)
-        self.vitesse = 1  
+        self.vitesse = 0.7
 
     def modifier_vitesse(self, vitesse):
         if 0 <= vitesse <= 1:
