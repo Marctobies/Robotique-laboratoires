@@ -10,10 +10,11 @@ from torch.utils.data import DataLoader
 import cv2
 import numpy as np
 
-
+#Référence pour CUDA: https://docs.pytorch.org/docs/stable/cuda.html
 class IA:
     def __init__(self):
         self.num_classes = 2
+        # J'utilise ici les CUDA core de mon GPU plutôt que mon processeur pour accélérer les calculs.
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         print(f"Device utilisé: {self.device}")
         
