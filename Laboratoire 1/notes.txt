@@ -1,6 +1,6 @@
 scp C:\chemin\vers\fichier pi@adresse_ip_du_pi:/chemin/de/destination/
 
-scp C:\Documents\Pi\Pi> scp 3-5.py pi@172.31.6.68:/home/pi/Documents/labo3
+scp C:\Documents\Pi\Pi> scp *.py pi@192.168.137.191:/home/pi/Documents/Labo6
 
 
 sudo shutdown -h now

@@ -26,7 +26,7 @@ class Camera:
         contours_filtres = []
         for c in contours:
             aire = cv2.contourArea(c)
-            if aire > 10000:
+            if aire > 10000: # Utiliser une constante pour l'aire minimale
                 contours_filtres.append(c)
         return len(contours_filtres)
     
@@ -53,7 +53,7 @@ class Odometre:
 
     def callback_encodeur_droite(self):
         self.transitions_droite += 1
-        if self.transitions_droite >= 10:
+        if self.transitions_droite >= 10: # Utiliser une constante pour le nombre de transitions
             self.event.set()
             self.transitions_droite = 0
             self.encodeur_droite.when_activated = None

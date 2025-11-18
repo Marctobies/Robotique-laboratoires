@@ -89,5 +89,5 @@ class Camera:
 # ---
 
     def release(self):
-        self.picam2.stop()
+        self.picam2.stop_thread()
         cv2.destroyAllWindows()
