@@ -11,77 +11,76 @@ def main():
     camera = Camera()
     robot = Robot()
     ia = IA()
-    
+
     try:
         ia.charger("modele_obstacle.pt")
     except FileNotFoundError:
         print("ERREUR: Fichier 'modele_obstacle.pt' introuvable!")
         print("Veuillez transférer le modèle entraîné depuis votre laptop.")
         return
-    
- 
-    
+
+
+
     obstacle_detecte = False
-    
+
+    # Créer la fenêtre une seule fois, avant la boucle
+    window_name = "Détection d'obstacles"
+    cv2.namedWindow(window_name, cv2.WINDOW_AUTOSIZE)
+
+    # Définir un seuil de sécurité (80%)
+    SEUIL_CONFIANCE = 0.95
+
     try:
         while True:
-            # Capturer l'image
             frame = camera.capturer_image()
-            
-            # Prédire avec l'IA
-            obstacle_detecte, label, confiance = ia.predire(frame)
-            
-            # Affichage de l'état sur l'image
-            if obstacle_detecte:
-                # OBSTACLE DÉTECTÉ - Affichage en rouge
-                texte = f"OBSTACLE DÉTECTÉ! ({confiance*100:.1f}%)"
-                couleur = (0, 0, 255)  # Rouge en BGR
+
+            is_obstacle, label, confiance = ia.predire(frame)
+
+            if is_obstacle and confiance < SEUIL_CONFIANCE:
+                is_obstacle = False
+                texte_debug = f"Ignoré ({confiance * 100:.1f}%)"
+
+            if is_obstacle:
+                texte = f"OBSTACLE ! ({confiance * 100:.1f}%)"
+                couleur = (0, 0, 255)
                 cv2.rectangle(frame, (0, 0), (frame.shape[1], 80), (0, 0, 200), -1)
-                cv2.putText(frame, texte, (10, 50), 
-                           cv2.FONT_HERSHEY_SIMPLEX, 1.2, couleur, 3)
+                cv2.putText(frame, texte, (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1.2, couleur, 3)
+
+                robot.arreter()
+
             else:
-                # VOIE LIBRE - Affichage en vert
-                texte = f"VOIE LIBRE ({confiance*100:.1f}%)"
+                texte = f"VOIE LIBRE ({confiance * 100:.1f}%)"
                 couleur = (0, 255, 0)
-                cv2.putText(frame, texte, (10, 40), 
-                           cv2.FONT_HERSHEY_SIMPLEX, 1, couleur, 2)
-            
-            # Afficher l'image
-            camera.afficher_image(frame, "Détection d'obstacles")
-            
-            # Lire la touche
+                cv2.putText(frame, texte, (10, 40), cv2.FONT_HERSHEY_SIMPLEX, 1, couleur, 2)
+
+            cv2.imshow(window_name, frame)
             key = cv2.waitKey(1) & 0xFF
-            
-            # Gestion des commandes
+
+
             if key == ord('w'):
-                if obstacle_detecte:
-                    print("AVANCER BLOQUÉ - Obstacle détecté!")
-                    robot.arreter()
-                else:
+                if not is_obstacle:
                     robot.avancer()
-            
+                else:
+                    print("COMMANDE REFUSÉE : Obstacle devant !")
+
             elif key == ord('s'):
                 robot.reculer()
-            
+
             elif key == ord('a'):
                 robot.tourner_gauche()
-
-            elif key == ord('q'):
-                robot.tourner_gauche_leger()
 
             elif key == ord('d'):
                 robot.tourner_droite()
 
-            elif key == ord('e'):
-                robot.tourner_droite_leger()
-
-            elif key == ord('x'):
+            elif key == ord(' ') or key == ord('x'):
                 robot.arreter()
-                break
-    
+                if key == ord('x'):
+                    break
+
     finally:
         robot.arreter()
         camera.release()
+        cv2.destroyAllWindows()
         print("\nSystème arrêté.")
 
 if __name__ == "__main__":

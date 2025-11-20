@@ -15,6 +15,7 @@ class IA:
     def __init__(self):
         self.num_classes = 2
         # J'utilise ici les CUDA core de mon GPU plutôt que mon processeur pour accélérer les calculs.
+        # En comparant les deux approches, j'ai remarqué qu'il n'y avait pratiquement aucune différence pour ce cas-ci.
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         print(f"Device utilisé: {self.device}")
         
@@ -67,7 +68,8 @@ class IA:
         print(f"  Learning rate: {learning_rate}")
         print(f"  Device: {self.device}")
         print("\n" + "-" * 60)
-        
+
+
         for epoch in range(num_epochs):
             total_loss = 0
             correct = 0

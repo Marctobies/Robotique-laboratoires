@@ -1,0 +1,25 @@
+﻿420-KF2-LG Conception d’environnements intelligents                                                       Automne 2025
+Laboratoire 6 - La navigation inertielle
+Objectifs 
+
+
+* Programmer l’unité de mesure inertielle ICM20948 pour obtenir les données sur les forces qui agissent sur le robot.
+* Programmer les formules mathématiques pour estimer l’orientation relative du robot et son cap magnétique.
+* Estimer le biais de l’unité de mesure inertielle lorsque le robot est immobile et tenir compte du biais dans l’estimation des orientations.
+* Calculer le cap magnétique et utiliser la technique de calibration du magnétomètre 
+Fonctionnalités 
+Vous devez programmer votre robot de façon à ce qu’il affiche dans une fenêtre ou dans la console l’orientation relative du robot autour de l’axe de x ainsi que son orientation par rapport au champ magnétique terrestre. 
+Consignes 
+* Programmez une classe Orientation qui possède:
+   * Un attribut qui permet de spécifier l’état du robot: immobile ou en rotation. 
+   * Un fil d’exécution (thread) qui effectue les opérations suivantes à intervalles réguliers (50 ms) en fonction de l’état du robot: 
+      * À l’arrêt: le fil calcule les biais de gx en utilisant une moyenne fenêtrée. 
+      * En rotation: le fil calcule la nouvelle orientation relative du robot en tenant compte du temps écoulé entre deux mesures et le biais calculé pour gx. 
+      * En tout temps: le fil calcule la nouvelle orientation par rapport au champ magnétique du robot. 
+* À l’exécution du programme, le robot doit calibrer son capteur de champ magnétique.
+
+
+
+
+
+
