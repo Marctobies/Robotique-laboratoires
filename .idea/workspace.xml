@@ -5,9 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4853fe02-389e-4e98-a4a5-36da1db4d302" name="Changes" comment="Ajout des références pour CUDA CORE">
-      <change beforePath="$PROJECT_DIR$/Laboratoire 7/ia.py" beforeDir="false" afterPath="$PROJECT_DIR$/Laboratoire 7/ia.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Laboratoire 8/camera.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Laboratoire 8/moteur.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Laboratoire 8/robot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Laboratoire 5/Version3/camera.py" beforeDir="false" afterPath="$PROJECT_DIR$/Laboratoire 8/lidar.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Laboratoire 5/Version3/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Laboratoire 8/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Laboratoire 6/VersionLoik/orientation.py" beforeDir="false" afterPath="$PROJECT_DIR$/Laboratoire 6/VersionLoik/orientation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Laboratoire 7/dataset.zip" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Laboratoire 7/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Laboratoire 7/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Laboratoire 7/modele_obstacle.pt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,6 +46,9 @@
   &quot;associatedIndex&quot;: 4
 }</component>
   <component name="ProjectId" id="34ybHpOOJa6wujxpcVavDyDC86h" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -56,7 +65,7 @@
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/marc_/OneDrive - Collège Lionel-Groulx/Documents/Technique de l'informatique/Session-5/Robotique/Laboratoires&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/marc_/OneDrive - Collège Lionel-Groulx/Documents/Technique de l'informatique/Session-5/Robotique/Laboratoires/Laboratoire 8&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -66,6 +75,9 @@
   }
 }</component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\marc_\OneDrive - Collège Lionel-Groulx\Documents\Technique de l'informatique\Session-5\Robotique\Laboratoires\Laboratoire 8" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\marc_\OneDrive - Collège Lionel-Groulx\Documents\Technique de l'informatique\Session-5\Robotique\Laboratoires\Laboratoire 7\dataset\train" />
     </key>
@@ -93,6 +105,14 @@
       <workItem from="1763475314678" duration="2084000" />
       <workItem from="1763570486767" duration="20000" />
       <workItem from="1763584823684" duration="244000" />
+      <workItem from="1763996587329" duration="39000" />
+      <workItem from="1763996680928" duration="3188000" />
+      <workItem from="1764003218655" duration="214000" />
+      <workItem from="1764250250608" duration="3003000" />
+      <workItem from="1764601125565" duration="3243000" />
+      <workItem from="1764605407252" duration="4087000" />
+      <workItem from="1764611692453" duration="2142000" />
+      <workItem from="1765299242189" duration="260000" />
     </task>
     <task id="LOCAL-00001" summary="Modifications de plusieurs laboratoires et ajout du laboratoire 7">
       <option name="closed" value="true" />

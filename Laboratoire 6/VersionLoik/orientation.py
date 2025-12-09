@@ -97,7 +97,7 @@ class Orientation:
             angle_rad = np.arctan2(mz_c, my_c)
             self.cap = float((np.degrees(angle_rad) + 360.0) % 360.0)
 
-            if self.etat == "immobile":
+            if self.etat == "immobile": b
                 self.samples_gx.append(gx)
                 if len(self.samples_gx) > FENETRE:
                     self.samples_gx.pop(0)

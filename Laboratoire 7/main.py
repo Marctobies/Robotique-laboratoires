@@ -45,7 +45,27 @@ def main():
                 couleur = (0, 0, 255)
                 cv2.rectangle(frame, (0, 0), (frame.shape[1], 80), (0, 0, 200), -1)
                 cv2.putText(frame, texte, (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1.2, couleur, 3)
+                key = cv2.waitKey(1) & 0xFF
 
+                if key == ord('w'):
+                    if not is_obstacle:
+                        robot.avancer()
+                    else:
+                        print("COMMANDE REFUSÉE : Obstacle devant !")
+
+                elif key == ord('s'):
+                    robot.reculer()
+
+                elif key == ord('a'):
+                    robot.tourner_gauche()
+
+                elif key == ord('d'):
+                    robot.tourner_droite()
+
+                elif key == ord(' ') or key == ord('x'):
+                    robot.arreter()
+                    if key == ord('x'):
+                        break
                 robot.arreter()
 
             else:
@@ -54,28 +74,7 @@ def main():
                 cv2.putText(frame, texte, (10, 40), cv2.FONT_HERSHEY_SIMPLEX, 1, couleur, 2)
 
             cv2.imshow(window_name, frame)
-            key = cv2.waitKey(1) & 0xFF
 
-
-            if key == ord('w'):
-                if not is_obstacle:
-                    robot.avancer()
-                else:
-                    print("COMMANDE REFUSÉE : Obstacle devant !")
-
-            elif key == ord('s'):
-                robot.reculer()
-
-            elif key == ord('a'):
-                robot.tourner_gauche()
-
-            elif key == ord('d'):
-                robot.tourner_droite()
-
-            elif key == ord(' ') or key == ord('x'):
-                robot.arreter()
-                if key == ord('x'):
-                    break
 
     finally:
         robot.arreter()
