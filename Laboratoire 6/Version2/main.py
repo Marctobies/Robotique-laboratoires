@@ -1,111 +1,84 @@
-# Auteur: Marc-Antoine Faucher et Loik Boulanger
-# Date: 2025-11-06
+# Auteur: Marc-Antoine Faucher
+# Date: 2025-12-01
 
 
-from robot import Robot
-from orientation import Orientation  # Assurez-vous d'avoir la version corrigée
-import time
 import cv2
 import numpy as np
+import time
+from camera import Camera
+from lidar import Lidar
+import ydlidar
+from robot import Robot
 
-def routine_calibration(robot, orientation, duree_secondes=10):
-    time.sleep(3) # Laisse le temps à l'utilisateur de lire
-    donnees_my = []
-    donnees_mz = []
-    
-    # Met le robot en rotation
-    robot.modifier_vitesse(0.5) # Une vitesse modérée pour la calibration
-    robot.tourner_sur_place_droite() 
-    
-    temps_debut = time.time()
-    while time.time() - temps_debut < duree_secondes:
-        try:
-            mx, my, mz = orientation.imu.read_magnetometer_data() 
-            donnees_my.append(my)
-            donnees_mz.append(mz)
-        except (IOError, TimeoutError) as e:
-            print(f"Erreur lecture IMU pendant calibration: {e}")
-        
-        time.sleep(0.05) 
 
-    robot.arreter()
-    print("Rotation terminée. Calcul des offsets...")
-
-    if donnees_my and donnees_mz:
-        max_my = max(donnees_my)
-        min_my = min(donnees_my)
-        max_mz = max(donnees_mz)
-        min_mz = min(donnees_mz)
-        
-        corr_my = (max_my + min_my) / 2
-        corr_mz = (max_mz + min_mz) / 2
-        
-        orientation.definir_calibration_magnetometre(corr_my, corr_mz)
-        print(f"Offsets calculés : corr_my={corr_my:.2f}, corr_mz={corr_mz:.2f}")
-    else:
-        print("ERREUR: Aucune donnée magnétique collectée. Calibration échouée.")
-    
-    print("--- FIN CALIBRATION ---")
 
 def main():
-    
     robot = Robot()
-    orientation = Orientation()
-
-    # Laisse 1s au thread d'orientation pour s'initialiser
-    time.sleep(1.0) 
-
+    
+    activer = True
+    window_name = "Fenetre"
+    print("Démarrage du contrôle du robot.")
+    cv2.namedWindow(window_name, cv2.WINDOW_AUTOSIZE)
+    robot.lidar.demarrer_scan()
     try:
-        # 1. Exécuter la calibration obligatoire [cite: 19]
-        routine_calibration(robot, orientation, duree_secondes=10)
-        
-        print("\nCalibration terminée. Début de l'affichage des données.")
-        time.sleep(2)
-        
-        # Création d'une fenêtre pour la capture des touches avec NumPy
-        img_controles = np.zeros((100, 300, 3), np.uint8)
-        cv2.imshow("Controles (q ou x pour quitter)", img_controles)
+        compteur = 0
+        while compteur < 5 or activer:
+            frame = robot.obtenir_vue()
+            cv2.imshow(window_name, frame)
+            key = cv2.waitKey(1)
 
-        # 2. Boucle principale pour afficher les données
-        while True:
-            key = cv2.waitKeyEx(100) # Réduit le délai pour une meilleure réactivité
-            
-            if key == ord('x') or key == ord('q'):
-                break
-            
-            en_mouvement = False
-            if key == ord('w'):
-                robot.avancer()
-                en_mouvement = True
-            elif key == ord('s'):
+            if robot.lidar.detecter_obstacle():
+                print("OBSTACLE ! Arrêt d'urgence.")
                 robot.reculer()
-                en_mouvement = True
-            elif key == ord('a'):
-                robot.tourner_gauche()
-                en_mouvement = True
-            elif key == ord('d'):
-                robot.tourner_droite()
-                en_mouvement = True
-            elif key == ord(' '):
-                robot.freiner()
-            elif key == -1: # Aucune touche pressée
                 robot.arreter()
+                if key == ord('s'):
+                    robot.reculer()
+                elif key == ord('x'):
+                    activer = False
+                continue
 
-            orientation.en_mouvement = en_mouvement
-            angle_rel, cap, biais = orientation.get_orientation_actuelle()
-            print(f"Angle X relatif: {angle_rel: 8.2f}°  |  Cap magnétique: {cap: 8.2f}°  (Biais Gx: {biais:.4f})", end="\r")
+            for i in range(4):
+                robot.avancer()
+                time.sleep(0.5)
+                robot.arreter()
+                time.sleep(0.2)
 
-    except KeyboardInterrupt:
-        print("\nArrêt demandé par l'utilisateur.")
-        
-    except Exception as e:
-        print(f"\nUne erreur critique est survenue: {e}")
-        
+                robot.angle_x = 0.0
+                robot.orientation.en_rotation = True
+                robot.tourner_droite()
+
+                while abs(robot.orientation.angle_x) < 90.0:
+                    time.sleep(0.01)
+                
+                robot.arreter()
+                print(f"Rotation {i+1} terminée. Angle mesuré: {robot.orientation.angle_x:.2f} degrés.")
+                robot.orientation.en_rotation = False
+                compteur += 1
+
+            if key == ord('x'):
+                robot.arreter()
+                activer = False
+            # if key == ord('w'):
+            #     robot.avancer()
+
+            # elif key == ord('s'):
+            #     robot.reculer()
+
+            # elif key == ord('a'):
+            #     robot.tourner_gauche()
+
+            # elif key == ord('d'):
+            #     robot.tourner_droite()
+
+            # elif key == ord(' '):
+            #     robot.arreter()
+
+            # elif key == ord('x'):
+            #     activer = False
+            #     robot.arreter()
     finally:
         robot.arreter()
-        orientation.arreter()
-        cv2.destroyAllWindows()
-        print("Robot arrêté et thread d'orientation terminé. Programme terminé.")
+        print("Arrêt du contrôle du robot.")
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

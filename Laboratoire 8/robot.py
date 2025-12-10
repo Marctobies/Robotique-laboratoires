@@ -5,6 +5,9 @@ from moteur import *
 from camera import Camera
 from lidar import Lidar
 from pince import Pince
+from orientation import Orientation
+from radio import Radio
+import math
 
 class Robot:
     def __init__(self):
@@ -13,7 +16,28 @@ class Robot:
         self.camera = Camera()
         self.lidar = Lidar()
         self.pince = Pince(17)
+        self.orientation = Orientation()
+        self.radio = Radio()
         self.vitesse = 0.7
+
+
+
+    def navigation_radio(self, cible_x, cible_y):
+        position = self.radio.obtenir_position()
+        if position is None:
+            print("Position non disponible.")
+            return
+
+        x_actuel, y_actuel = position
+        delta_x = cible_x - x_actuel
+        delta_y = cible_y - y_actuel
+
+        angle_cible = math.degrees(math.atan2(delta_y, delta_x))
+        if angle_cible < 0:
+            angle_cible += 360
+
+        print(f"Angle vers la cible: {angle_cible:.2f} degrés")
+
 
     def modifier_vitesse(self, vitesse):
         if 0 <= vitesse <= 1:
@@ -32,6 +56,7 @@ class Robot:
     def demarrer (self):
         self.lidar.demarrer_scan()
         self.camera.demarrer_camera()
+        
 
     def obtenir_vue(self):
         image = self.camera.capturer_image()
@@ -70,6 +95,9 @@ class Robot:
     def arreter(self):
         self.moteur_gauche.arreter()
         self.moteur_droit.arreter()
+
+    def release(self):
         self.lidar.arreter_scan()
-        self.camera.arreter_camera()
+        self.camera.release()
+        
 

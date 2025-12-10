@@ -37,6 +37,28 @@ class Lidar:
         if self.lidar.turnOff():
             self.activer = False
 
+    def detecter_obstacle(self, distance_seuil_mm=700, angle_cone_deg=120):
+        if not self.activer:
+            return False
+
+        if self.scan is None or len(self.scan.points) == 0:
+            return False
+
+        for point in self.scan.points:
+            distance_mm = point.range * 1000
+            angle_rad = point.angle
+            angle_deg = math.degrees(angle_rad)
+
+            if angle_deg > 180:
+                angle_deg -= 360
+
+            demi_cone = angle_cone_deg / 2
+            if -demi_cone <= angle_deg <= demi_cone:
+                if 10 < distance_mm < distance_seuil_mm:
+                    return True
+        return False
+
+
     def dessiner_image(self, image, max_distance_mm=5000):
         if not self.activer:
             return image
