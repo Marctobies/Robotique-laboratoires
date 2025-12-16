@@ -1,4 +1,0 @@
-
-DEL jaune = GPIO 10
-DEL verte = GPIO 9
-

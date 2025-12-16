@@ -8,6 +8,9 @@ from pince import Pince
 from orientation import Orientation
 from radio import Radio
 import math
+import time
+
+
 
 class Robot:
     def __init__(self):
@@ -21,22 +24,84 @@ class Robot:
         self.vitesse = 0.7
 
 
+    def déplacer_vers_points(self, dx, dy):
+        print("Attente de la position initiale...")
+        pos_depart = self.radio.obtenir_position()
+        while pos_depart is None:
+            time.sleep(0.5)
+            pos_depart = self.radio.obtenir_position()
+        
+        x_actuel, y_actuel = pos_depart
+        x_cible = x_actuel + dx
+        y_cible = y_actuel + dy
 
-    def navigation_radio(self, cible_x, cible_y):
-        position = self.radio.obtenir_position()
-        if position is None:
-            print("Position non disponible.")
-            return
+        print(f"Déplacement de ({x_actuel}, {y_actuel}) vers cible ({x_cible}, {y_cible})")
 
-        x_actuel, y_actuel = position
-        delta_x = cible_x - x_actuel
-        delta_y = cible_y - y_actuel
+        tolerance = 5.0
+        
+        while True:
+            delta_x = x_cible - x_actuel
+            delta_y = y_cible - y_actuel
+            distance = math.sqrt(delta_x**2 + delta_y**2)
 
-        angle_cible = math.degrees(math.atan2(delta_y, delta_x))
-        if angle_cible < 0:
-            angle_cible += 360
+            if distance < tolerance:
+                print("Destination atteinte !")
+                self.arreter()
+                break
 
-        print(f"Angle vers la cible: {angle_cible:.2f} degrés")
+            temps_avance = min(distance * 0.5, 2.0)
+            self.avancer()
+            time.sleep(temps_avance) 
+            self.arreter()
+
+            nouvelle_pos = self.radio.obtenir_position()
+            if nouvelle_pos:
+                x_actuel, y_actuel = nouvelle_pos
+            else:
+                print("Perte signal radio, arrêt.")
+                break
+
+    def tourner_relatif(self, angle_deg):
+
+        self.orientation.en_rotation = True
+        angle_depart = self.orientation.angle_x
+        angle_objectif = angle_deg
+        angle_parcouru = 0.0
+
+        print(f"Début rotation de {angle_deg} degrés.")
+
+        if angle_deg > 0: 
+            self.tourner_gauche()
+        else: 
+            self.tourner_droite()
+
+        while abs(angle_parcouru) < abs(angle_objectif):
+            time.sleep(0.05)
+            angle_actuel = self.orientation.angle_x
+            angle_parcouru = angle_actuel - angle_depart
+            print(f"Angle parcouru: {angle_parcouru:.2f}/{angle_objectif}, Actuel: {angle_actuel:.2f}")
+
+        self.arreter()
+        self.orientation.en_rotation = False
+        print(f"Rotation terminée. Angle parcouru : {angle_parcouru:.2f}")
+
+
+    def routine_déplacement(self):
+        print("Début routine...")
+        
+        self.déplacer_vers_points(0, -2)
+        
+        time.sleep(1)
+
+        print("Exemple: Rotation de 90 degrés à gauche...")
+        self.tourner_relatif(90) 
+        time.sleep(1)
+
+        print("Exemple: Rotation de 90 degrés à droite...")
+        self.tourner_relatif(-90) 
+        time.sleep(1)
+
+        print("Routine terminée.")
 
 
     def modifier_vitesse(self, vitesse):
@@ -55,8 +120,8 @@ class Robot:
 
     def demarrer (self):
         self.lidar.demarrer_scan()
-        self.camera.demarrer_camera()
-        
+        self.orientation.debuter_lecture()
+
 
     def obtenir_vue(self):
         image = self.camera.capturer_image()
@@ -99,5 +164,5 @@ class Robot:
     def release(self):
         self.lidar.arreter_scan()
         self.camera.release()
+        self.orientation.arreter()
         
-

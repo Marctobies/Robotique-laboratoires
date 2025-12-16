@@ -1,6 +1,5 @@
-
 # Auteur: Marc-Antoine Faucher et Loik Boulanger
-# Date: 2025-11-17
+# Date: 2025-11-20
 
 import cv2
 from picamera2 import Picamera2
@@ -14,12 +13,12 @@ class Camera:
         self.HAUTEUR = hauteur
         self.picam2 = Picamera2()
         
-        # Configuration de la caméra
         config = self.picam2.create_preview_configuration(
             main={"format": 'RGB888', "size": (self.LARGEUR, self.HAUTEUR)})
         self.picam2.align_configuration(config)
         self.picam2.configure(config)
         self.picam2.start()
+        
     
     def capturer_image(self):
         frame_bgr = self.picam2.capture_array()

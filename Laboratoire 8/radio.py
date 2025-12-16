@@ -11,8 +11,6 @@ class Radio:
         self.ser.stopbits = serial.STOPBITS_ONE
         self.ser.timeout = 0.1
         self.ser.open()
-
-
         self.ser.flushInput()
         self.actif = True
 
@@ -23,7 +21,7 @@ class Radio:
 
         self.ser.write(b'lep\n')
         data = str(self.ser.readline())
-        print(data)
+        print(data)   
 
         if data.startswith("b'POS"):
             parties = data.split(',')

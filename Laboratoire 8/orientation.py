@@ -41,7 +41,7 @@ class Orientation:
                 self.vieux_gx = 0.0
             else:
                 gx_corrige = gx - self.biais_gx
-                self.angle_x += delta_temps * (gx_corrige + self.vieux_gx) / 2
+                self.angle_x -= delta_temps * (gx_corrige + self.vieux_gx) / 2
                 self.vieux_gx = gx_corrige
 
             my_corrige = my - self.corr_my

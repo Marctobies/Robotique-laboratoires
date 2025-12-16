@@ -1,21 +1,19 @@
-from gpiozero import AngularServo
+from gpiozero import Servo
 from time import sleep
- 
 
-class Pince: 
-    def __init__(self, pin):
-        self.servo = AngularServo(pin, min_angle=-90, max_angle=90)
-        self.angle_ouvert = 45
-        self.angle_ferme = -45
-        self.ouvrir()
 
-    def ouvrir(self):
-        self.servo.angle = self.angle_ouvert
-        sleep(0.5)
-        self.servo.detach()
+def main(): 
+    pince = Servo(17)
 
-    def fermer(self):
-        self.servo.angle = self.angle_ferme
-        sleep(0.5)
-        self.servo.detach()
+    while True:
+        pince.min()
+        sleep(2)
+        pince.max()
+        sleep(2)
+        pince.mid()
     
+if __name__ == "__main__":
+    main()
+    
+
+

@@ -1,27 +1,28 @@
-import cv2
 import time
 from robot import Robot
 
-
 def main():
-    print("Démarrage du programme")
+    print("Démarrage du programme de test")
+    
     robot = Robot()
     
-    time.sleep(1)
+    try:
+        robot.demarrer()
+        print("Robot démarré. Initialisation des capteurs")
+        time.sleep(2)
 
-    key = cv2.waitKey(1)
-    while key != ord('q'):
-        resultat = robot.navigation_radio(10, 20)
-        # if resultat is not None:
-        #     x, y = resultat
-        #     print(f"Position du robot (X: {x:.2f}, Y: {y:.2f})")
-        # else:
-        #     pass
+        print("Exécution de la routine de déplacement")
+        robot.routine_déplacement()
+        print("Routine de déplacement terminée.")
 
-        # key = cv2.waitKey(100) 
-
-    robot.radio.fermer()
-    cv2.destroyAllWindows()
+    except Exception as e:
+        print(f"Une erreur est survenue: {e}")
+    finally:
+        print("Arrêt du robot")
+        robot.arreter()
+        robot.release()
+        robot.radio.fermer()
+        print("Programme terminé.")
 
 if __name__ == "__main__":
     main()

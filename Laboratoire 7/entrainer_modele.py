@@ -1,5 +1,10 @@
 # Auteur: Marc-Antoine Faucher et Loik Boulanger
-# Date: 2025-11-17
+# Date: 2025-11-20
+
+# J'ai fait un fichier séparé qui utilise la classe IA pour entraîner le modèle.
+# Cela me permet d'afficher des messages spécifiques à l'entraînement pour tester et déboguer plus facilement
+# sans encombrer ma méthode dans la classe IA.
+
 
 from ia import IA
 import torch
@@ -8,9 +13,8 @@ from torch.utils.data import DataLoader
 
 
 def main():
-    print("\n" + "=" * 60)
-    print("ENTRAÎNEMENT DU MODÈLE DE DÉTECTION D'OBSTACLES")
-    print("=" * 60 + "\n")
+
+    print("Début de l'entraînement du modèle")
     
     ia = IA()
     
@@ -25,9 +29,7 @@ def main():
     
     ia.sauvegarder("modele_obstacle.pt")
     
-    print("\n" + "=" * 60)
-    print("PROCESSUS TERMINÉ")
-    print("=" * 60)
+    print("Entraînement terminé")
   
 
 if __name__ == "__main__":

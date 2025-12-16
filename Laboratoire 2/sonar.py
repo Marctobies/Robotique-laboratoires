@@ -1,56 +1,59 @@
-#Auteur: Marc-Antoine Faucher
-#Date: 2025-09-15
+#Auteur: Marc-Antoine Faucher et Loik Boulanger
+#Date: 2025-09-18
 
-
-import threading
-from led import DEL
-from gpiozero import DigitalInputDevice, DigitalOutputDevice
 import time
-
-
+from gpiozero import DigitalInputDevice, DigitalOutputDevice
+from led import DEL
 
 class Sonar:
     VITESSE_DU_SON = 34300.0  # cm/s
 
-    def __init__(self, trigger_pin, echo_pin, led_pin):
+    def __init__(self, trigger_pin: int, echo_pin: int, led_pin: int):
         self.trigger = DigitalOutputDevice(trigger_pin)
         self.echo = DigitalInputDevice(echo_pin)
-        self.echo.when_activated = self.demarrer
-        self.echo.when_deactivated = self.arreter
-        self.start_time = 0
-        self.distance = 0
-        self.running = True
-        self.thread = threading.Thread(target=self.loop, daemon=True)
-        self.thread.start()
         self.led = DEL(led_pin)
 
+        self.distance = 0.0
+        self.debut_temps = 0.0
+        self.distance_max = 100.0
+        self._running = False
 
-    def loop(self):
-        while self.running:
-            self.trigger.on()
-            time.sleep(1)
-            self.trigger.off()
-            time.sleep(1)
-
-
-
-    def ajouter_distance(self, distance):
-        self.distance = distance
+        self.echo.when_activated = self._on_echo_high
+        self.echo.when_deactivated = self._on_echo_low
 
     def demarrer(self):
-        self.start_time = time.perf_counter()
+        self._running = True
 
     def arreter(self):
-        if self.start_time == 0:
-            return
-        duration = time.perf_counter() - self.start_time
-        distance = duration * Sonar.vitesse_du_son / 2
-        self.distance = distance
-        blink_speed = self.distance / 60
-        if distance < 60:
-            self.led.clignoter(blink_speed, blink_speed)
-        self.start_time = 0
+        self._running = False
+        self.led.eteindre()
+
+    def _on_echo_high(self):
+        self.debut_temps = time.perf_counter()
+
+    def _on_echo_low(self):
+        duree = time.perf_counter() - self.debut_temps
+        self.distance = (duree * Sonar.VITESSE_DU_SON) / 2.0
+        self.debut_temps = 0.0
+        self.mise_a_jour_led()
+
+    def mesurer_distance(self):
+        self.trigger.off()
+        time.sleep(0.000002)
+        self.trigger.on()
+        time.sleep(0.00001)
+        self.trigger.off()
+
+        time.sleep(0.02)
+
+    def mise_a_jour_led(self):
+        distance = self.distance
+        if 0 < distance < self.distance_max:
+            temps = max(0.05, (distance / self.distance_max) * 1.0)
+            self.led.clignoter(temps, temps)
+        else:
+            self.led.eteindre()
 
     def get_distance(self):
+        self.mesurer_distance()
         return self.distance
-

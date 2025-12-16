@@ -1,5 +1,5 @@
 # Auteur: Marc-Antoine Faucher et Loik Boulanger
-# Date: 2025-11-17
+# Date: 2025-11-20
 
 import os
 import torch
@@ -14,8 +14,9 @@ import numpy as np
 class IA:
     def __init__(self):
         self.num_classes = 2
-        # J'utilise ici les CUDA core de mon GPU plutôt que mon processeur pour accélérer les calculs.
-        # En comparant les deux approches, j'ai remarqué qu'il n'y avait pratiquement aucune différence pour ce cas-ci.
+        # J'ai essayé d'utiliser les CUDA CORE de ma carte graphique RTX NVIDIA plutôt que mon processeur pour accélérer les calculs.
+        # J'ai toutefois remarqué que cela ne change pas grand chose considérant la taille du modèle et la quantité
+        # de données utilisées. J'ai comparé les deux et le temps d'entraînement est similaire. 
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         print(f"Device utilisé: {self.device}")
         
@@ -39,9 +40,7 @@ class IA:
     
     def entrainer(self, dataset_path="dataset", num_epochs=10, learning_rate=0.001, batch_size=32):
         
-        print("\n" + "=" * 60)
-        print("ENTRAÎNEMENT DU MODÈLE")
-        print("=" * 60)
+        print("Entraînement du modèle")
         
         transform = transforms.Compose([
             transforms.Resize((128, 128)),
@@ -52,23 +51,10 @@ class IA:
         train_dataset = datasets.ImageFolder(train_path, transform=transform)
         train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
         
-        print(f"\nDataset d'entraînement:")
-        print(f"  Nombre d'images: {len(train_dataset)}")
-        print(f"  Classes: {train_dataset.classes}")
-        print(f"  Batch size: {batch_size}")
-        print(f"  Nombre de batches: {len(train_loader)}")
-        
         criterion = nn.CrossEntropyLoss()
         optimizer = optim.Adam(self.modele.parameters(), lr=learning_rate)
         
         self.modele.train()
-        
-        print(f"\nParamètres d'entraînement:")
-        print(f"  Epochs: {num_epochs}")
-        print(f"  Learning rate: {learning_rate}")
-        print(f"  Device: {self.device}")
-        print("\n" + "-" * 60)
-
 
         for epoch in range(num_epochs):
             total_loss = 0
@@ -92,15 +78,11 @@ class IA:
             
             print(f"Epoch {epoch+1}/{num_epochs} - Loss: {avg_loss:.4f} - Accuracy: {accuracy:.2f}%")
         
-        print("-" * 60)
-        print("✓ Entraînement terminé!")
-        print("=" * 60 + "\n")
+        print("Entraînement terminé")
     
     def evaluer(self, dataset_path="dataset"):
         
-        print("\n" + "=" * 60)
-        print("ÉVALUATION DU MODÈLE")
-        print("=" * 60)
+        print("Évaluation du modèle")
         
         transform = transforms.Compose([
             transforms.Resize((128, 128)),
@@ -110,10 +92,6 @@ class IA:
         val_path = os.path.join(dataset_path, "val")
         val_dataset = datasets.ImageFolder(val_path, transform=transform)
         val_loader = DataLoader(val_dataset, batch_size=32, shuffle=False)
-        
-        print(f"\nDataset de validation:")
-        print(f"  Nombre d'images: {len(val_dataset)}")
-        print(f"  Classes: {val_dataset.classes}")
         
         self.modele.eval()
         
@@ -131,16 +109,13 @@ class IA:
         
         print(f"\n{'Résultat:'}")
         print(f"Accuracy: {accuracy:.2f}%")
-        print(f"Images correctes: {correct}/{total}")
         
         if accuracy >= 85:
-            print("Excellente performance!")
+            print("Précisions adéquates:" + str(accuracy) + "%")
         elif accuracy >= 70:
-            print("Performance acceptable mais peut être améliorée")
+            print("Précisions moyennes:" + str(accuracy) + "%")
         else:
-            print("Performance faible - collectez plus d'images variées")
-        
-        print("=" * 60 + "\n")
+            print("Précision faible: " + str(accuracy) + "%")
         
         return accuracy
     

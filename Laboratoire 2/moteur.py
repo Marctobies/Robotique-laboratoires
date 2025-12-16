@@ -1,32 +1,40 @@
-#Auteur: Marc-Antoine Faucher
-#Date: 2024-09-15
+#Auteur: Marc-Antoine Faucher et Loik Boulanger
+#Date: 2025-09-18
 
+from gpiozero import *
 
-from gpiozero import DigitalOutputDevice, PWMOutputDevice
 
 class Moteur:
-    def __init__(self, in1, in2, pwmpin):
-        self.in1 = DigitalOutputDevice(in1)
-        self.in2 = DigitalOutputDevice(in2)
-        self.pwmpin = PWMOutputDevice(pwmpin)
+    def __init__(self, pin_avancer, pin_reculer, pin_puissance):
+        self.avancer_pin = DigitalOutputDevice(pin_avancer)
+        self.reculer_pin = DigitalOutputDevice(pin_reculer)
+        self.vitesse = PWMOutputDevice(pin_puissance)
+
+    def valider_vitesse(self, vitesse):
+        if 0 <= vitesse <= 1:
+            return True
+        else:
+            print("Vitesse invalide. Doit être entre 0 et 1.")
+            return False
 
     def avancer(self, vitesse):
-        self.in1.on()
-        self.in2.off()
-        self.pwmpin.value = vitesse
-
+        if self.valider_vitesse(vitesse):
+            self.reculer_pin.off()
+            self.avancer_pin.on()
+            self.vitesse.value = vitesse
 
     def reculer(self, vitesse):
-        self.in1.off()
-        self.in2.on()
-        self.pwmpin.value = vitesse
+        if self.valider_vitesse(vitesse):
+            self.avancer_pin.off()
+            self.reculer_pin.on()
+            self.vitesse.value = vitesse
+
+    def freiner(self, force=1):
+        self.avancer_pin.on()
+        self.reculer_pin.on()
+        self.vitesse.value = force
 
     def arreter(self):
-        self.in1.off()
-        self.in2.off()
-        self.pwmpin.value = 0
-
-    def freiner(self):
-        self.in1.on()
-        self.in2.on()
-        self.pwmpin.value = 1
+        self.avancer_pin.off()
+        self.reculer_pin.off()
+        self.vitesse.value = 0
