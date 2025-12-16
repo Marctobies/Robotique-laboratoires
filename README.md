@@ -9,7 +9,7 @@ Ce dossier contient l'ensemble des travaux pratiques et laboratoires réalisés 
 
     Collaborations mentionnées : Étienne (Lab 8)
 
-📂 Contenu des Laboratoires
+### 📂 Contenu des Laboratoires
 
 Chaque sous-dossier représente une étape clé dans le développement des fonctionnalités du robot.
 
