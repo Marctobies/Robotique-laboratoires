@@ -12,7 +12,8 @@ Ce dossier contient l'ensemble des travaux pratiques et laboratoires réalisés 
 📂 Contenu des Laboratoires
 
 Chaque sous-dossier représente une étape clé dans le développement des fonctionnalités du robot.
-Laboratoire 1 : Contrôle Manuel et Motorisation
+
+**Laboratoire 1 : Contrôle Manuel et Motorisation**
 
 Objectif : Prise en main du robot et implémentation du contrôle moteur de base.
 
@@ -25,7 +26,7 @@ Objectif : Prise en main du robot et implémentation du contrôle moteur de base
         Implémentation de manœuvres de base (avancer, reculer, pivots, virages).
 
 
-Laboratoire 2 : Capteurs et Actionneurs Simples
+**Laboratoire 2 : Capteurs et Actionneurs Simples**
 
 Objectif : Intégration des premiers périphériques d'interaction.
 
@@ -36,7 +37,7 @@ Objectif : Intégration des premiers périphériques d'interaction.
         Utilisation du capteur sonar pour la détection de proximité basique.
 
 
-Laboratoire 3 : Odométrie
+**Laboratoire 3 : Odométrie**
 
 Objectif : Suivi de la position et du déplacement du robot.
 
@@ -45,7 +46,7 @@ Objectif : Suivi de la position et du déplacement du robot.
         Calcul des distances parcourues via les encodeurs des moteurs.
 
 
-Laboratoire 4 : Vision par Ordinateur (Suivi d'objet)
+**Laboratoire 4 : Vision par Ordinateur (Suivi d'objet)**
 
 Objectif : Rendre le robot capable de suivre un objet coloré (ex: une balle).
 
@@ -56,13 +57,13 @@ Objectif : Rendre le robot capable de suivre un objet coloré (ex: une balle).
         Asservissement visuel : le robot ajuste sa direction ("GAUCHE", "DROITE", "AVANCER") en fonction de la position de la balle dans l'image.
 
 
-Laboratoire 5 : Traitement d'Images Avancé
+**Laboratoire 5 : Traitement d'Images Avancé**
 
 Objectif : Manipulation d'images et reconnaissance de formes.
 
     Contenu : Utilisation de masques et de modèles de référence (fichiers masque.png, modele.png).
 
-Laboratoire 6 : Navigation et LiDAR
+**Laboratoire 6 : Navigation et LiDAR**
 
 Objectif : Navigation autonome avec évitement d'obstacles et orientation précise.
 
@@ -75,7 +76,7 @@ Objectif : Navigation autonome avec évitement d'obstacles et orientation préci
         Navigation programmée (ex: parcours carré) utilisant un capteur d'orientation (IMU) pour des virages précis à 90°.
 
 
-Laboratoire 7 : Intelligence Artificielle (Détection d'Obstacles)
+**Laboratoire 7 : Intelligence Artificielle (Détection d'Obstacles)**
 
 Objectif : Classification d'images en temps réel pour la navigation.
 
@@ -90,7 +91,7 @@ Objectif : Classification d'images en temps réel pour la navigation.
         Collecte de données (collecte_image.py) pour constituer le dataset d'entraînement.
 
 
-Laboratoire 8 & PFI : Intégration Finale
+**Laboratoire 8 & PFI : Intégration Finale**
 
 Objectif : Projet final intégrant l'ensemble des technologies.
 
