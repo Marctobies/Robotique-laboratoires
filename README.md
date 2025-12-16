@@ -16,13 +16,13 @@ Laboratoire 1 : Contrôle Manuel et Motorisation
 
 Objectif : Prise en main du robot et implémentation du contrôle moteur de base.
 
-Fonctionnalités :
+    Fonctionnalités :
 
-    Pilotage manuel du robot via le clavier (Z/Q/S/D ou W/A/S/D).
+        Pilotage manuel du robot via le clavier (Z/Q/S/D ou W/A/S/D).
 
-    Gestion logicielle de la vitesse (accélération/décélération).
+        Gestion logicielle de la vitesse (accélération/décélération).
 
-    Implémentation de manœuvres de base (avancer, reculer, pivots, virages).
+        Implémentation de manœuvres de base (avancer, reculer, pivots, virages).
 
 
 Laboratoire 2 : Capteurs et Actionneurs Simples
