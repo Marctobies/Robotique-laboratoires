@@ -1,4 +1,4 @@
-Laboratoires de Robotique - Conception d'environnements intelligents
+# Laboratoires de Robotique - Conception d'environnements intelligents
 
 Ce dossier contient l'ensemble des travaux pratiques et laboratoires réalisés dans le cadre du cours de Conception d'environnements intelligents. L'objectif de ces laboratoires est de développer progressivement les capacités d'un robot mobile (basé sur Raspberry Pi) en intégrant divers capteurs, de la vision par ordinateur et de l'intelligence artificielle.
 👥 Auteurs
